@@ -26,8 +26,10 @@ else
  */
 
 /* calcular las cuotas */
+function cuotas (){
 let compra=parseInt(prompt("ingrese el precio de su compra"))
 let numero=parseInt(prompt("ingrese que opcion de cuotas quiere"))
+
 let precioFinal;
 let precioiva;
 let iva=1.21;
@@ -40,10 +42,7 @@ switch(numero){
     precioiva=precioFinal*iva;
     console.log("el precio con iva es de :"+precioiva)
 
-    
     break;
-
-
     case 3:
     console.log("se le agregara el 30% a la compra");
     precioFinal=compra*1.30;
@@ -71,8 +70,12 @@ switch(numero){
     default:
         console.log("opcion invalida")
 }
+}
+cuotas();
 
 
+/* hacer una pag de mates  */
+/* hacer los mates dentro de class , las bombillas dentro de otra class, y los termos dentro de otra class */
 
 
 
