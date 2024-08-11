@@ -1,37 +1,32 @@
-/* calcular edad promedio  */
+/* descuento por compra */
+let totalcondescuentoi;
+let porcentajeDeDescuento=0.05;
+let descuento
+let a=parseInt(prompt("ingrese el monto de su compra"))
+if(a>=10000)
+{
+    descuento=a*porcentajeDeDescuento;
+    totalcondescuentoi=a-descuento;
+    console.log("usted tiene un descuento de el 5%");
+    console.log("su descuento es de ",Math.round(descuento))
+    console.log("usted debe pagar  :",Math.round(totalcondescuentoi))
+
+
+   
+}
+else{
+    console.log("usted no tenddra descuento")
+}
  
-/* let edad
-let sumaEdades=0
-for(let i=1;i<=5;i++)
-{
-    let edad=parseInt(prompt("ingresar las edades para luego sacar el promedio de las mismas"));
-    console.log("la edad es:"+edad);
-    sumaEdades+=edad
-
-}
-let promedio= sumaEdades/5;
-console.log("el promedio de las edades es:",promedio);
-if(promedio>=18)
-{
-    console.log("el promedio de las edades es mayor  a 18 años")
-
-}
-else
-{
-    console.error("el promedio de edades es menor a 18 años")
-}
-
-
-
- */
+ 
 
 /* calcular las cuotas */
-/* function cuotas (){
+ /* function cuotas (){
 let compra=parseInt(prompt("ingrese el precio de su compra"))
 let numero=parseInt(prompt("ingrese que opcion de cuotas quiere"))
 
-let precioFinal;
-let precioiva;
+let precioFinal=Math.round(precioFinal);
+let precioiva=Math.round(precioiva);
 let iva=1.21;
 switch(numero){
     
@@ -76,8 +71,14 @@ cuotas();
 
 /* hacer una pag de mates  */
 /* hacer los mates dentro de class , las bombillas dentro de otra class, y los termos dentro de otra class */
+/* precio con y sin iva */
+/* let iva=1.21;
+let precio=parseFloat(prompt("ingrese el prcio con iva de el producto"))
+let precionoiva=precio*iva;
+console.log("el precio con iva es",precio);
+console.log("el precio sin iva es", precionoiva); */
 
-class mate{
+/*   class mate{
     constructor(precio,tipo,color){
         this.precio=precio
         this.tipo=tipo
@@ -120,7 +121,22 @@ bombillas.push(new bombilla(1200,"pico loro"))
 bombillas.push(new bombilla(1400,"bombillon"))
 bombillas.push(new bombilla(1500,"bombilla de alpaca"))
 bombillas.push(new bombilla(1600,"bombilla de acero inoxidable"))
-console.log(bombillas)
+console.log(bombillas) 
+ */
+
+/* poner la fecha de hoy */
+
+/*  const anio=new Date(23,5,25);
+console.log(anio)
+ console.log("estamos en el dia",anio.getDate())
+console.log("del año:",anio.getFullYear())
+console.log("y de el mes numero",anio.getMonth()+1)  */
+
+
+
+
+
+
 
 
 
