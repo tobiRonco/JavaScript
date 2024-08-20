@@ -78,51 +78,7 @@ let precionoiva=precio*iva;
 console.log("el precio con iva es",precio);
 console.log("el precio sin iva es", precionoiva); */
 
-/*   class mate{
-    constructor(precio,tipo,color){
-        this.precio=precio
-        this.tipo=tipo
-        this.color=color
 
-    }
-}
-const mates=[]
-mates.push(new mate(1000,"imperial,negro"))
-mates.push(new mate(1000,"imperial,marron"))
-mates.push(new mate(1000,"camionero,negro"))
-mates.push(new mate(1000,"torpedo,negro"))
-console.log(mates);
-
-
-class termo{
-    constructor(precio,tipo,color){
-        this.precio=precio
-        this.tipo=tipo
-        this.color=color
-
-    }
-}
-const termos=[]
-termos.push(new termo(1000,"imperial,negro"))
-termos.push(new termo(1000,"imperial,marron"))
-termos.push(new termo(1000,"camionero,negro"))
-termos.push(new termo(1000,"torpedo,negro"))
-console.log(termos)
-
-class bombilla{
-    constructor(precio,tipo,color){
-        this.precio=precio
-        this.tipo=tipo
-
-    }
-}
-const bombillas=[]
-bombillas.push(new bombilla(1200,"pico loro"))
-bombillas.push(new bombilla(1400,"bombillon"))
-bombillas.push(new bombilla(1500,"bombilla de alpaca"))
-bombillas.push(new bombilla(1600,"bombilla de acero inoxidable"))
-console.log(bombillas) 
- */
 
 /* poner la fecha de hoy */
 
@@ -141,9 +97,147 @@ console.log("y de el mes numero",anio.getMonth()+1)  */
 const main = document.querySelector('main');
 const div = document.createElement('div');
 const h1 = document.createElement('h1');
+const div2 = document.createElement('div');
+const img = document.createElement('img');
 h1.textContent = 'Bienvenido a la Web de mates';
-div.appendChild(h1);
-main.appendChild(div);
+
+// Definición de las clases
+ class Mate {
+    constructor(precio, tipo, color) {
+        this.precio = precio;
+        this.tipo = tipo;
+        this.color = color;
+    }
+}
+
+class Termo {
+    constructor(precio, tipo, color) {
+        this.precio = precio;
+        this.tipo = tipo;
+        this.color = color;
+    }
+}
+
+class Bombilla {
+    constructor(precio, tipo) {
+        this.precio = precio;
+        this.tipo = tipo;
+    }
+} 
+
+
+
+// Arrays de productos
+const mates = [
+    new Mate(1000, 'imperial', 'negro'),
+    new Mate(1000, 'imperial', 'marron'),
+    new Mate(1000, 'camionero', 'negro'),
+    new Mate(1000, 'torpedo', 'negro')
+];
+
+const termos = [
+    new Termo(1000, 'imperial', 'negro'),
+    new Termo(1000, 'imperial', 'marron'),
+    new Termo(1000, 'camionero', 'negro'),
+    new Termo(1000, 'torpedo', 'negro')
+];
+
+const bombillas = [
+    new Bombilla(1200, 'pico loro'),
+    new Bombilla(1400, 'bombillon'),
+    new Bombilla(1500, 'bombilla de alpaca'),
+    new Bombilla(1600, 'bombilla de acero inoxidable')
+];
+
+
+
+// Selección de contenedores en el DOM
+const productosContainer = document.createElement('div');
+productosContainer.id = 'productos';
+main.appendChild(productosContainer);
+
+const carritoContainer = document.createElement('div');
+carritoContainer.id = 'carrito';
+main.appendChild(carritoContainer);
+
+const totalElement = document.createElement('p');
+totalElement.innerHTML = 'Total: <span id="total">0</span>';
+main.appendChild(totalElement);
+
+// Carrito de compras
+let carrito = [];
+let total = 0;
+
+// Función para crear un elemento de producto
+function crearElementoProducto(producto, tipo) {
+    const div = document.createElement('div');
+    div.className = 'producto';
+    
+    let descripcion = '';
+    if (producto instanceof Mate) {
+        descripcion = `Mate ${producto.tipo}, Color: ${producto.color}`;
+    } else if (producto instanceof Termo) {
+        descripcion = `Termo ${producto.tipo}, Color: ${producto.color}`;
+    } else if (producto instanceof Bombilla) {
+        descripcion = `Bombilla ${producto.tipo}`;
+    }
+    
+    div.innerHTML = `
+        <p>${descripcion}</p>
+        <p>Precio: $${producto.precio}</p>
+        <button onclick="agregarAlCarrito('${tipo}', ${producto.precio})">Agregar al carrito</button>
+    `;
+    
+    return div;
+}
+
+// Función para mostrar productos en el DOM
+function mostrarProductos() {
+    const tipos = { Mate: mates, Termo: termos, Bombilla: bombillas };
+    
+    for (const tipo in tipos) {
+        tipos[tipo].forEach(producto => {
+            productosContainer.appendChild(crearElementoProducto(producto, tipo));
+        });
+    }
+}
+
+// Función para agregar un producto al carrito
+function agregarAlCarrito(tipo, precio) {
+    carrito.push({ tipo, precio });
+    total += precio;
+    actualizarCarrito();
+}
+
+// Función para actualizar el carrito en el DOM
+function actualizarCarrito() {
+    carritoContainer.innerHTML = '';
+    carrito.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'carrito-item';
+        div.innerHTML = `
+            <p>Producto: ${item.tipo}</p>
+            <p>Precio: $${item.precio}</p>
+            <button onclick="removerDelCarrito(${index})">Eliminar</button>
+        `;
+        carritoContainer.appendChild(div);
+    });
+    totalElement.querySelector('#total').textContent = total;
+}
+
+// Función para remover un producto del carrito
+function removerDelCarrito(index) {
+    total -= carrito[index].precio;
+    carrito.splice(index, 1);
+    actualizarCarrito();
+}
+
+// Mostrar productos al cargar la página
+mostrarProductos();
+
+
+
+
 
 
 
