@@ -1,5 +1,5 @@
 /* descuento por compra */
-let totalcondescuentoi;
+/* let totalcondescuentoi;
 let porcentajeDeDescuento=0.05;
 let descuento
 let a=parseInt(prompt("ingrese el monto de su compra"))
@@ -17,7 +17,7 @@ if(a>=10000)
 else{
     console.log("usted no tenddra descuento")
 }
- 
+  */
  
 
 /* calcular las cuotas */
@@ -131,6 +131,21 @@ console.log(anio)
  console.log("estamos en el dia",anio.getDate())
 console.log("del año:",anio.getFullYear())
 console.log("y de el mes numero",anio.getMonth()+1)  */
+
+
+
+
+//agregando dom
+// con esto agrego un titulo
+
+const main = document.querySelector('main');
+const div = document.createElement('div');
+const h1 = document.createElement('h1');
+h1.textContent = 'Bienvenido a la Web de mates';
+div.appendChild(h1);
+main.appendChild(div);
+
+
 
 
 
