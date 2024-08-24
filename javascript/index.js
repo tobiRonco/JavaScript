@@ -100,6 +100,9 @@ const h1 = document.createElement('h1');
 const div2 = document.createElement('div');
 const img = document.createElement('img');
 h1.textContent = 'Bienvenido a la Web de mates';
+main.appendChild(h1);
+
+
 
 // Definición de las clases
  class Mate {
