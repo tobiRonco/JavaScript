@@ -89,23 +89,30 @@ console.log("del año:",anio.getFullYear())
 console.log("y de el mes numero",anio.getMonth()+1)  */
 
 
+// Datos JSON de productos
+const productosJSON = {
+    "mates": [
+        {"precio": 1000, "tipo": "imperial", "color": "negro"},
+        {"precio": 1000, "tipo": "imperial", "color": "marron"},
+        {"precio": 1000, "tipo": "camionero", "color": "negro"},
+        {"precio": 1000, "tipo": "torpedo", "color": "negro"}
+    ],
+    "termos": [
+        {"precio": 1000, "tipo": "imperial", "color": "negro"},
+        {"precio": 1000, "tipo": "imperial", "color": "marron"},
+        {"precio": 1000, "tipo": "camionero", "color": "negro"},
+        {"precio": 1000, "tipo": "torpedo", "color": "negro"}
+    ],
+    "bombillas": [
+        {"precio": 1200, "tipo": "pico loro"},
+        {"precio": 1400, "tipo": "bombillon"},
+        {"precio": 1500, "tipo": "bombilla de alpaca"},
+        {"precio": 1600, "tipo": "bombilla de acero inoxidable"}
+    ]
+};
 
-
-//agregando dom
-// con esto agrego un titulo
-
-const main = document.querySelector('main');
-const div = document.createElement('div');
-const h1 = document.createElement('h1');
-const div2 = document.createElement('div');
-const img = document.createElement('img');
-h1.textContent = 'Bienvenido a la Web de mates';
-main.appendChild(h1);
-
-
-
-// Definición de las clases
- class Mate {
+// Clases de productos
+class Mate {
     constructor(precio, tipo, color) {
         this.precio = precio;
         this.tipo = tipo;
@@ -126,52 +133,27 @@ class Bombilla {
         this.precio = precio;
         this.tipo = tipo;
     }
-} 
-
-
+}
 
 // Arrays de productos
-const mates = [
-    new Mate(1000, 'imperial', 'negro'),
-    new Mate(1000, 'imperial', 'marron'),
-    new Mate(1000, 'camionero', 'negro'),
-    new Mate(1000, 'torpedo', 'negro')
-];
+let mates = [];
+let termos = [];
+let bombillas = [];
 
-const termos = [
-    new Termo(1000, 'imperial', 'negro'),
-    new Termo(1000, 'imperial', 'marron'),
-    new Termo(1000, 'camionero', 'negro'),
-    new Termo(1000, 'torpedo', 'negro')
-];
+// Cargar datos desde JSON
+function cargarDatos() {
+    const matesData = productosJSON.mates;
+    const termosData = productosJSON.termos;
+    const bombillasData = productosJSON.bombillas;
 
-const bombillas = [
-    new Bombilla(1200, 'pico loro'),
-    new Bombilla(1400, 'bombillon'),
-    new Bombilla(1500, 'bombilla de alpaca'),
-    new Bombilla(1600, 'bombilla de acero inoxidable')
-];
+    mates = matesData.map(d => new Mate(d.precio, d.tipo, d.color));
+    termos = termosData.map(d => new Termo(d.precio, d.tipo, d.color));
+    bombillas = bombillasData.map(d => new Bombilla(d.precio, d.tipo));
+    
+    mostrarProductos();
+}
 
-
-
-// Selección de contenedores en el DOM
-const productosContainer = document.createElement('div');
-productosContainer.id = 'productos';
-main.appendChild(productosContainer);
-
-const carritoContainer = document.createElement('div');
-carritoContainer.id = 'carrito';
-main.appendChild(carritoContainer);
-
-const totalElement = document.createElement('p');
-totalElement.innerHTML = 'Total: <span id="total">0</span>';
-main.appendChild(totalElement);
-
-// Carrito de compras
-let carrito = [];
-let total = 0;
-
-// Función para crear un elemento de producto
+// Crear elemento de producto
 function crearElementoProducto(producto, tipo) {
     const div = document.createElement('div');
     div.className = 'producto';
@@ -185,16 +167,20 @@ function crearElementoProducto(producto, tipo) {
         descripcion = `Bombilla ${producto.tipo}`;
     }
     
+    const button = document.createElement('button');
+    button.textContent = 'Agregar al carrito';
+    button.addEventListener('click', () => agregarAlCarrito(tipo, producto.precio));
+    
     div.innerHTML = `
         <p>${descripcion}</p>
         <p>Precio: $${producto.precio}</p>
-        <button onclick="agregarAlCarrito('${tipo}', ${producto.precio})">Agregar al carrito</button>
     `;
+    div.appendChild(button);
     
     return div;
 }
 
-// Función para mostrar productos en el DOM
+// Mostrar productos en el DOM
 function mostrarProductos() {
     const tipos = { Mate: mates, Termo: termos, Bombilla: bombillas };
     
@@ -205,7 +191,10 @@ function mostrarProductos() {
     }
 }
 
-// Función para agregar un producto al carrito
+// Función para agregar al carrito
+let carrito = [];
+let total = 0;
+
 function agregarAlCarrito(tipo, precio) {
     carrito.push({ tipo, precio });
     total += precio;
@@ -235,8 +224,29 @@ function removerDelCarrito(index) {
     actualizarCarrito();
 }
 
-// Mostrar productos al cargar la página
-mostrarProductos();
+// Configuración inicial del DOM
+const main = document.querySelector('main');
+const h1 = document.createElement('h1');
+h1.textContent = 'Bienvenido a la Web de mates';
+main.appendChild(h1);
+
+const productosContainer = document.createElement('div');
+productosContainer.id = 'productos';
+main.appendChild(productosContainer);
+
+const carritoContainer = document.createElement('div');
+carritoContainer.id = 'carrito';
+main.appendChild(carritoContainer);
+
+const totalElement = document.createElement('p');
+totalElement.innerHTML = 'Total: <span id="total">0</span>';
+main.appendChild(totalElement);
+
+// Cargar datos y mostrar productos al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    cargarDatos();
+});
+
 
 
 
