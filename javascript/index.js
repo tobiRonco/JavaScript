@@ -215,6 +215,9 @@ function actualizarCarrito() {
         carritoContainer.appendChild(div);
     });
     totalElement.querySelector('#total').textContent = total;
+    
+    // Guardar el carrito en el localStorage
+    localStorage.setItem('carrito', JSON.stringify(carrito));
 }
 
 // Función para remover un producto del carrito
@@ -222,6 +225,16 @@ function removerDelCarrito(index) {
     total -= carrito[index].precio;
     carrito.splice(index, 1);
     actualizarCarrito();
+}
+
+// Función para cargar el carrito desde localStorage y actualizar el DOM
+function cargarCarritoDesdeLocalStorage() {
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+        carrito = JSON.parse(carritoGuardado);
+        total = carrito.reduce((acc, item) => acc + item.precio, 0); // Recalcular el total
+        actualizarCarrito(); // Actualizar la vista del carrito con los datos cargados
+    }
 }
 
 // Configuración inicial del DOM
@@ -245,7 +258,9 @@ main.appendChild(totalElement);
 // Cargar datos y mostrar productos al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     cargarDatos();
+    cargarCarritoDesdeLocalStorage(); // Cargar carrito desde localStorage
 });
+
 
 
 
