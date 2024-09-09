@@ -80,16 +80,8 @@ console.log("el precio sin iva es", precionoiva); */
 
 
 
-/* poner la fecha de hoy */
-
-/*  const anio=new Date(23,5,25);
-console.log(anio)
- console.log("estamos en el dia",anio.getDate())
-console.log("del año:",anio.getFullYear())
-console.log("y de el mes numero",anio.getMonth()+1)  */
-
-
 // Datos JSON de productos
+// JSON de productos
 const productosJSON = {
     "mates": [
         {"precio": 1000, "tipo": "imperial", "color": "negro"},
@@ -181,14 +173,20 @@ function crearElementoProducto(producto, tipo) {
 }
 
 // Mostrar productos en el DOM
-function mostrarProductos() {
+function mostrarProductos(filtroTipo = '') {
+    productosContainer.innerHTML = ''; // Limpiar productos previos
+
     const tipos = { Mate: mates, Termo: termos, Bombilla: bombillas };
-    
-    for (const tipo in tipos) {
-        tipos[tipo].forEach(producto => {
-            productosContainer.appendChild(crearElementoProducto(producto, tipo));
-        });
-    }
+    const productosAFiltrar = filtroTipo ? tipos[filtroTipo] || [] : [...mates, ...termos, ...bombillas];
+
+    productosAFiltrar.forEach(producto => {
+        let tipo;
+        if (producto instanceof Mate) tipo = 'Mate';
+        else if (producto instanceof Termo) tipo = 'Termo';
+        else if (producto instanceof Bombilla) tipo = 'Bombilla';
+
+        productosContainer.appendChild(crearElementoProducto(producto, tipo));
+    });
 }
 
 // Función para agregar al carrito
@@ -237,11 +235,109 @@ function cargarCarritoDesdeLocalStorage() {
     }
 }
 
+// Función para calcular las cuotas
+function calcularCuotas() {
+    const monto = parseFloat(document.getElementById('monto').value);
+    const cuotas = parseInt(document.getElementById('cuotas').value);
+
+    if (isNaN(monto) || cuotas <= 0) {
+        alert("Por favor ingrese un monto válido y seleccione un número de cuotas.");
+        return;
+    }
+
+    let precioFinal;
+    let precioiva;
+    const iva = 1.21;
+    
+    switch (cuotas) {
+        case 1:
+            precioFinal = monto * 1.15;
+            break;
+        case 3:
+            precioFinal = monto * 1.30;
+            break;
+        case 6:
+            precioFinal = monto * 1.50;
+            break;
+        case 12:
+            precioFinal = monto * 2;
+            break;
+        default:
+            alert("Opción de cuotas inválida");
+            return;
+    }
+
+    precioiva = precioFinal * iva;
+    precioFinal = Math.round(precioFinal);
+    precioiva = Math.round(precioiva);
+
+    resultadosCuotas.innerHTML = `
+        <p>Precio final (con recargo): $${precioFinal}</p>
+        <p>Precio final (con IVA): $${precioiva}</p>
+    `;
+}
+
 // Configuración inicial del DOM
 const main = document.querySelector('main');
 const h1 = document.createElement('h1');
 h1.textContent = 'Bienvenido a la Web de mates';
 main.appendChild(h1);
+
+// Crear menú de filtro
+const filtroContainer = document.createElement('div');
+filtroContainer.id = 'filtro';
+
+const filtroSelect = document.createElement('select');
+filtroSelect.id = 'filtro-tipo';
+filtroSelect.innerHTML = `
+    <option value="">Mostrar Todos</option>
+    <option value="Mate">Mate</option>
+    <option value="Termo">Termo</option>
+    <option value="Bombilla">Bombilla</option>
+`;
+filtroContainer.appendChild(filtroSelect);
+
+const aplicarFiltroButton = document.createElement('button');
+aplicarFiltroButton.textContent = 'Aplicar Filtro';
+aplicarFiltroButton.addEventListener('click', () => {
+    const filtroTipo = filtroSelect.value;
+    mostrarProductos(filtroTipo);
+});
+filtroContainer.appendChild(aplicarFiltroButton);
+
+main.appendChild(filtroContainer);
+
+// Crear sección para cuotas
+const cuotasContainer = document.createElement('div');
+cuotasContainer.id = 'cuotas';
+
+const montoInput = document.createElement('input');
+montoInput.type = 'number';
+montoInput.id = 'monto';
+montoInput.placeholder = 'Ingrese el monto de la compra';
+cuotasContainer.appendChild(montoInput);
+
+const cuotasSelect = document.createElement('select');
+cuotasSelect.id = 'cuotas';
+cuotasSelect.innerHTML = `
+    <option value="">Seleccione cuotas</option>
+    <option value="1">1 cuota</option>
+    <option value="3">3 cuotas</option>
+    <option value="6">6 cuotas</option>
+    <option value="12">12 cuotas</option>
+`;
+cuotasContainer.appendChild(cuotasSelect);
+
+const calcularCuotasButton = document.createElement('button');
+calcularCuotasButton.textContent = 'Calcular Cuotas';
+calcularCuotasButton.addEventListener('click', calcularCuotas);
+cuotasContainer.appendChild(calcularCuotasButton);
+
+const resultadosCuotas = document.createElement('div');
+resultadosCuotas.id = 'resultados-cuotas';
+cuotasContainer.appendChild(resultadosCuotas);
+
+main.appendChild(cuotasContainer);
 
 const productosContainer = document.createElement('div');
 productosContainer.id = 'productos';
@@ -259,7 +355,9 @@ main.appendChild(totalElement);
 document.addEventListener('DOMContentLoaded', () => {
     cargarDatos();
     cargarCarritoDesdeLocalStorage(); // Cargar carrito desde localStorage
+    mostrarProductos(); // Mostrar todos los productos por defecto
 });
+
 
 
 
